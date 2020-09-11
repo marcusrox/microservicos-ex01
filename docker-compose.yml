@@ -3,7 +3,8 @@ version: "3.7"
 services:
 
     app:
-        build: .
+        #build: .
+        image: marcusms/microservicos-ex01-app
         container_name: app
         volumes: 
             - .:/var/www
