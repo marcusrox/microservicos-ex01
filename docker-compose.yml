@@ -3,19 +3,28 @@ version: "3.7"
 services:
 
     app:
-        #build: .
-        image: marcusms/microservicos-ex01-app
+        build: .
+        #image: marcusms/microservicos-ex01-app
         container_name: app
+        entrypoint: dockerize -wait tcp://data:3306 -timeout 40s ./.docker/entrypoint.sh
         volumes: 
             - .:/var/www
         networks: 
             - app-network
+        depends_on: 
+            - data
+            - redis
 
     nginx:
-        build: .docker/nginx
+        build: 
+            context: .docker/nginx
+            args:
+                NGINX_HOST: app
+                NGINX_PORT: 9000
         container_name: nginx
         restart: always
         tty: true
+         #entrypoint: ./.docker/nginx/entrypoint.sh
         ports: 
             - 8000:80
         volumes:
@@ -26,7 +35,7 @@ services:
     data:
         image: mysql:5.7
         volumes:
-            - laravel-mysql-data:/var/lib/mysql
+            - mysql-dbdata:/var/lib/mysql
         environment: 
             MYSQL_ROOT_PASSWORD: secret
             MYSQL_DATABASE: laravel
@@ -39,10 +48,10 @@ services:
             - 6379
         networks: 
             - app-network
-    
-volumes:
-    laravel-mysql-data:
-
+  
 networks: 
     app-network: 
         driver: bridge
+
+volumes:
+    mysql-dbdata: 
