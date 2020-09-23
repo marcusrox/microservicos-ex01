@@ -1,0 +1,67 @@
+version: "3.7"
+
+services:
+
+    app:
+        build: .
+        #image: marcusms/microservicos-ex01-app
+        container_name: app
+        # entrypoint: dockerize -wait tcp://data:3306 -timeout 40s ./.docker/entrypoint.sh
+        # environment:
+            # - DB_HOST=data
+            # - DB_DATABASE=laravel
+            # - DB_USER=root
+            # - DB_PASSWORD=secret
+        volumes: 
+            - .:/var/www
+        networks: 
+            - app-network
+        depends_on: 
+            - data
+            - redis
+
+    nginx:
+        build: 
+            context: .docker/nginx
+            args:
+                NGINX_HOST: app
+                NGINX_PORT: 9000
+        container_name: nginx
+        restart: always
+        tty: true
+         #entrypoint: ./.docker/nginx/entrypoint.sh
+        ports: 
+            - 8000:80
+        volumes:
+            - .:/var/www
+        networks: 
+            - app-network
+        depends_on: 
+            - app
+
+    data:
+        image: mysql:5.7
+        container_name: data
+        command: --inno-db-use-native-aio=0  
+        volumes:
+            - mysql-dbdata:/var/lib/mysql
+        environment: 
+            - MYSQL_DATABASE=laravel
+            - MYSQL_ROOT_PASSWORD=secret
+            - MYSQL_USER=root
+        networks: 
+            - app-network
+
+    redis:
+        image: redis:alpine
+        expose:
+            - 6379
+        networks: 
+            - app-network
+  
+networks: 
+    app-network: 
+        driver: bridge
+
+volumes:
+    mysql-dbdata: 
