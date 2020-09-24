@@ -1,3 +1,4 @@
 steps:
-- name: 'docker/compose'
-  args: ['up']
+- id: "Rodando o docker-compose"
+  name: 'docker/compose'
+  args: ['-f','docker-compose.cloudbuild.yaml','up','-d']
