@@ -40,9 +40,9 @@ services:
             - app
 
     db:
-        image: mysql:5.7
+        image: mariadb/server:10.4
         container_name: db
-        command: --inno-db-use-native-aio=0  
+        #command: --inno-db-use-native-aio=0  
         volumes:
             - mysql-db:/var/lib/mysql
         environment: 
