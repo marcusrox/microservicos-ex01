@@ -23,7 +23,7 @@ RUN rm -rf /var/www/html
 RUN chown -R www-data:www-data /var/www
 RUN usermod -u 1000 www-data
 USER www-data
-#COPY . /var/www
+COPY . /var/www
 
 #RUN ln -s public html
 
