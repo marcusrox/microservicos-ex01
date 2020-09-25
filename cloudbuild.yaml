@@ -15,18 +15,18 @@ steps:
   name: 'gcr.io/cloud-builders/docker'
   args: ['exec', '-t', 'app', 'cp', '.env.example', '.env']  
 
-id: "Rodando o key:generate"
+- id: "Rodando o key:generate"
   name: 'gcr.io/cloud-builders/docker'
   args: ['exec', '-t', 'app', 'php', 'artisan', 'key:generate']
 
-id: "Rodando o key:generate"
+- id: "Rodando o key:generate"
   name: 'gcr.io/cloud-builders/docker'
   args: ['exec', '-t', 'app', 'php', 'artisan', 'key:generate']
 
-id: "Rodando php artisan migrate"
+- id: "Rodando php artisan migrate"
   name: 'gcr.io/cloud-builders/docker'
   args: ['exec', '-t', 'app', 'php', 'artisan', 'migrate']
 
-id: "Rodando testes do phpunit"
+- id: "Rodando testes do phpunit"
   name: 'gcr.io/cloud-builders/docker'
   args: ['exec', '-t', 'app', 'php', 'vendor/bin/phpunit', '-c', 'phpunit.xml']
