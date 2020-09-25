@@ -17,7 +17,7 @@ services:
         networks: 
             - app-network
         depends_on: 
-            - data
+            - db
             - redis
 
     nginx:
@@ -39,12 +39,12 @@ services:
         depends_on: 
             - app
 
-    data:
+    db:
         image: mysql:5.7
-        container_name: data
+        container_name: db
         command: --inno-db-use-native-aio=0  
         volumes:
-            - mysql-dbdata:/var/lib/mysql
+            - mysql-db:/var/lib/mysql
         environment: 
             - MYSQL_DATABASE=laravel
             - MYSQL_ROOT_PASSWORD=secret
@@ -64,4 +64,4 @@ networks:
         driver: bridge
 
 volumes:
-    mysql-dbdata: 
+    mysql-db: 
